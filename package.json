@@ -1,0 +1,28 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "command line utility to get differences between two YAML or JSON documents",
+  "main": "index.js",
+  "bin": "bin/gendiff.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikki-li/frontend-project-46.git"
+  },
+  "author": "Alexandra Yakshina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ikki-li/frontend-project-46/issues"
+  },
+  "homepage": "https://github.com/ikki-li/frontend-project-46#readme",
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "prettier": "^2.8.3"
+  },
+  "dependencies": {
+    "commander": "^10.0.0"
+  }
+}
