@@ -22,6 +22,7 @@
   "homepage": "https://github.com/ikki-li/frontend-project-46#readme",
   "devDependencies": {
     "eslint": "^8.32.0",
+    "jest": "^29.4.0",
     "prettier": "^2.8.3"
   },
   "dependencies": {
