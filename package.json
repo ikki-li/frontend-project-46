@@ -9,6 +9,9 @@
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
+  "simple-git-hooks": {
+	  "pre-push": "make lint"
+  },
   "type": "module",
   "repository": {
     "type": "git",
