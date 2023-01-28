@@ -40,12 +40,6 @@ const generateDiff = (path1, path2) => {
   if (!fs.existsSync(normalizedPath1) || !fs.existsSync(normalizedPath2)) {
     throw new Error("File doesn't exist");
   }
-  if (
-    !fs.lstatSync(normalizedPath1).isFile()
-        || !fs.lstatSync(normalizedPath2).isFile()
-  ) {
-    throw new Error('File not found');
-  }
   const extension1 = path.extname(normalizedPath1);
   const extension2 = path.extname(normalizedPath2);
   let difference;
