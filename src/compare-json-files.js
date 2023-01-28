@@ -8,7 +8,7 @@ const compare = (object1, object2) => {
   const commonKeys = _.union(keys1, keys2);
   const sortedCommonKeys = _.sortBy(commonKeys);
   const result = [];
-  for (const key of sortedCommonKeys) {
+  sortedCommonKeys.forEach((key) => {
     if (!Object.hasOwn(object1, key)) {
       result.push(['+', key, object2[key]]);
     } else if (!Object.hasOwn(object2, key)) {
@@ -17,20 +17,20 @@ const compare = (object1, object2) => {
       result.push([' ', key, object1[key]]);
     } else if (
       Object.hasOwn(object1, key)
-            && Object.hasOwn(object2, key)
-            && object1[key] !== object2[key]
+      && Object.hasOwn(object2, key)
+      && object1[key] !== object2[key]
     ) {
       result.push(['-', key, object1[key]], ['+', key, object2[key]]);
     }
-  }
+  });
   return result;
 };
 
 const prepareOutput = (data) => {
   let result = '';
-  for (const element of data) {
+  data.forEach((element) => {
     result += ` ${element[0]} ${element[1]}: ${element[2]}\n`;
-  }
+  });
   return `{\n${result}}`;
 };
 
