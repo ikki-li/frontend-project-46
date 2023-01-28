@@ -2,15 +2,8 @@
 
 ## The compare tool
 
-### Status of Last Testing and Linting:
-
 [![Actions Status](https://github.com/ikki-li/frontend-project-46/workflows/Node-CI/badge.svg)](https://github.com/ikki-li/frontend-project-46/actions/workflows/nodejs.yml)
-
-### Maintainability rating on CodeClimate:
-
 [![Maintainability](https://api.codeclimate.com/v1/badges/6ac4226b51369ea46644/maintainability)](https://codeclimate.com/github/ikki-li/frontend-project-46/maintainability)
-
-### Test Coverage on CodeClimate:
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6ac4226b51369ea46644/test_coverage)](https://codeclimate.com/github/ikki-li/frontend-project-46/test_coverage)
 
 ### Description:
