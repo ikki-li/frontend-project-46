@@ -1,21 +1,25 @@
 name: Node-CI
 
 on:
-  push
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main  
   
 env:
   CI: true
 
 jobs:
   build:
+    
+    runs-on: ubuntu-latest
   
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-21.10]
         version: [19.x]
         
-    runs-on: ${{ matrix.os }}
-    
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.version }}
@@ -23,9 +27,12 @@ jobs:
         with:
           node-version: ${{ matrix.version }}
           cache: 'npm'
-      - run: make install
-      - run: make lint
-      - run: make test
+      - name: npm install
+        run: make install-deps
+      - name: run linter
+        run: make lint
+      - name: run test
+        run: make test
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env: 
