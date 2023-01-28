@@ -12,7 +12,7 @@ Command line utility to get differences between two YAML or JSON documents.
 
 ### Requirements:
 
-Node.js ^13.2.0
+Node.js ^14.0.0
 
 ### Installation:
 
