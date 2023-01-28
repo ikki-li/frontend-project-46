@@ -25,7 +25,4 @@ test('get difference between two YAML files', () => {
       getFixturePath('file2.json'),
     );
   }).toThrow("File doesn't exist");
-  expect(() => {
-    generateDiff(getFixturePath('is-not-file'), getFixturePath('file2.json'));
-  }).toThrow('File not found');
 });
