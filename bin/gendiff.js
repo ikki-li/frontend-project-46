@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import generateDiff from '../src/compare-json-files.js';
+import runDiff from '../src/compare-json-files.js';
 
 program
   .name('gendiff')
@@ -10,6 +10,6 @@ program
   .argument('<path1>', 'the first path to compare')
   .argument('<path2>', 'the second path to compare')
   .action((path1, path2) => {
-    generateDiff(path1, path2);
+    runDiff(path1, path2);
   });
 program.parse();
