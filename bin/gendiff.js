@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import runDiff from '../src/compare-json-files.js';
+import runDiff from '../src/compare.js';
 
 program
   .name('gendiff')
