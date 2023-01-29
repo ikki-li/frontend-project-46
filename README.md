@@ -22,4 +22,4 @@ npm install @hexlet/code
 
 ### GenDiff on Asciinema:
 
-[![Asciicast 554137](https://asciinema.org/a/554173.svg)](https://asciinema.org/a/554173)
+[![Asciicast 555427](https://asciinema.org/a/555427.svg)](https://asciinema.org/a/555427)
