@@ -22,4 +22,8 @@ npm install @hexlet/code
 
 ### GenDiff on Asciinema:
 
+**Get differnece between two JSON files:**
 [![Asciicast 555427](https://asciinema.org/a/555427.svg)](https://asciinema.org/a/555427)
+
+**Get difference between two YAML files:**
+[![Asciicast 555481](https://asciinema.org/a/555481.svg)](https://asciinema.org/a/555481)
