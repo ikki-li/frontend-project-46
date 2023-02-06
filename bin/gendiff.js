@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import runDiff from '../src/compare.js';
+import runDiff from '../src/index.js';
 
 program
   .name('gendiff')
@@ -9,7 +9,7 @@ program
   .option('-f, --format <type>', 'output format')
   .argument('<path1>', 'the first path to compare')
   .argument('<path2>', 'the second path to compare')
-  .action((path1, path2) => {
-    runDiff(path1, path2);
+  .action((filepath1, filepath2) => {
+    runDiff(filepath1, filepath2);
   });
 program.parse();
