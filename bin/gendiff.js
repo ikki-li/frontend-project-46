@@ -6,10 +6,11 @@ program
   .name('gendiff')
   .description('Compares two configuration files and shows a difference')
   .option('-V, --version', 'output the version number')
-  .option('-f, --format <type>', 'output format')
-  .argument('<path1>', 'the first path to compare')
-  .argument('<path2>', 'the second path to compare')
-  .action((filepath1, filepath2) => {
-    runDiff(filepath1, filepath2);
+  .argument('<filepath1>', 'the first path to compare')
+  .argument('<filepath2>', 'the second path to compare')
+  .option('-f, --format <type>', 'format difference', 'stylish')
+  .action((filepath1, filepath2, options) => {
+    const formatName = options.format;
+    runDiff(filepath1, filepath2, formatName);
   });
 program.parse();
