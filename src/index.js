@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as fs from 'node:fs';
 import _ from 'lodash';
-import { generateTreeView } from './formatters/stylish.js';
 import { parse } from './parsers/parser.js';
+import { chooseFormat } from './formatters/index.js';
 
 const getSortedEntries = (object) => {
   const entries = Object
@@ -78,11 +78,10 @@ const compare = (object1, object2) => {
     acc.push(['+', key, preparedValue2]);
     return acc;
   }, []);
-  console.log(difference);
   return difference;
 };
 
-const runDiff = (path1, path2) => {
+const runDiff = (path1, path2, formatName = 'stylish') => {
   const normalizedPath1 = path.resolve(path1);
   const normalizedPath2 = path.resolve(path2);
   if (!fs.existsSync(normalizedPath1) || !fs.existsSync(normalizedPath2)) {
@@ -104,8 +103,9 @@ const runDiff = (path1, path2) => {
   const object1 = parse(data1, format1);
   const object2 = parse(data2, format2);
   const difference = compare(object1, object2);
-  console.log(generateTreeView(difference));
-  return generateTreeView(difference);
+  const format = chooseFormat(formatName);
+  console.log(format(difference));
+  return format(difference);
 };
 
 export default runDiff;
