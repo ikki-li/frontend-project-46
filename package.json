@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "command line utility to get differences between two YAML or JSON documents",
-  "main": "gendiff.js",
+  "main": "bin/gendiff.js",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
