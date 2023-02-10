@@ -40,34 +40,27 @@ const generateTreeView = (data) => {
         const childrenView = iter(children, depth + 1);
         return `${currentIndent}  ${name}: ${childrenView}`;
       }
+      const { value1, value2 } = node;
+      const formattedValue1 = _.isObject(value1)
+        ? formatObject(value1, depth)
+        : value1;
+      const formattedValue2 = _.isObject(value2)
+        ? formatObject(value2, depth)
+        : value2;
+
       const { status } = node;
       switch (status) {
         case 'changed': {
-          const { value1, value2 } = node;
-          const formattedValue1 = _.isObject(value1)
-            ? formatObject(value1, depth) : value1;
-          const formattedValue2 = _.isObject(value2)
-            ? formatObject(value2, depth) : value2;
           return `${currentIndent}- ${name}: ${formattedValue1}\n${currentIndent}+ ${name}: ${formattedValue2}`;
         }
         case 'added': {
-          const { value } = node;
-          const formattedValue = _.isObject(value)
-            ? formatObject(value, depth) : value;
-          return `${currentIndent}+ ${name}: ${formattedValue}`;
+          return `${currentIndent}+ ${name}: ${formattedValue2}`;
         }
         case 'deleted': {
-          const { value } = node;
-          const formattedValue = _.isObject(value)
-            ? formatObject(value, depth) : value;
-          return `${currentIndent}- ${name}: ${formattedValue}`;
+          return `${currentIndent}- ${name}: ${formattedValue1}`;
         }
         case 'unchanged': {
-          const { value } = node;
-          const formattedValue = _.isObject(value)
-            ? formatObject(value, depth)
-            : value;
-          return `${currentIndent}  ${name}: ${formattedValue}`;
+          return `${currentIndent}  ${name}: ${formattedValue1}`;
         }
         default: {
           throw new Error('Type of node is not defined');
