@@ -47,7 +47,6 @@ const generateTreeView = (data) => {
       const formattedValue2 = _.isObject(value2)
         ? formatObject(value2, depth)
         : value2;
-
       const { status } = node;
       switch (status) {
         case 'changed': {
