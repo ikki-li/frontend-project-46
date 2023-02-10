@@ -17,19 +17,22 @@ const compare = (object1, object2) => {
 
     const item = { name: `${key}` };
     if (!Object.hasOwn(object1, key)) {
-      item.type = 'added';
-      item.value = _.cloneDeep(value2);
+      item.status = 'added';
+      item.type = 'plained';
+      item.value = value2;
       acc.push(item);
       return acc;
     }
     if (!Object.hasOwn(object2, key)) {
-      item.type = 'deleted';
-      item.value = _.cloneDeep(value1);
+      item.status = 'deleted';
+      item.type = 'plained';
+      item.value = value1;
       acc.push(item);
       return acc;
     }
     if (_.isEqual(value1, value2)) {
-      item.type = 'unchanged';
+      item.status = 'unchanged';
+      item.type = 'plained';
       item.value = value1;
       acc.push(item);
       return acc;
@@ -39,12 +42,13 @@ const compare = (object1, object2) => {
       && _.isObject(value2)
       && !Array.isArray(value2)) {
       const children = compare(value1, value2);
-      item.type = 'node';
+      item.type = 'nested';
       item.children = children;
       acc.push(item);
       return acc;
     }
-    item.type = 'changed';
+    item.status = 'changed';
+    item.type = 'plained';
     item.value1 = value1;
     item.value2 = value2;
     acc.push(item);
