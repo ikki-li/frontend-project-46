@@ -1,51 +1,58 @@
-import _ from 'lodash';
+const formatValue = (value) => {
+  switch (typeof value) {
+    case 'object':
+      return value !== null ? '[complex value]' : value;
+    case 'string':
+      return `'${value}'`;
+    default:
+      return value;
+  }
+};
 
 const generatePlainView = (data) => {
   const iter = (currentItem, path) => {
-    let lastValue;
     const lines = currentItem.reduce((acc, item) => {
-      const [sign, key, value] = item;
-      let preparedValue;
-      switch (typeof value) {
-        case 'object':
-          if (value !== null) {
-            preparedValue = '[complex value]';
-          } else {
-            preparedValue = null;
-          }
-          break;
-        case 'string':
-          preparedValue = `'${value}'`;
-          break;
-        default:
-          preparedValue = value;
+      const { name, type } = item;
+      const newPath = `${path}${name}.`;
+      if (type === 'nested') {
+        const { children } = item;
+        acc.push([iter(children, newPath)]);
+        return acc;
       }
-      const previousString = acc.length !== 0 ? _.last(acc).join() : '';
-      const newPath = `${path}${key}.`;
-      const arrayIdentifier = Array.isArray(value) ? value[0] : '';
-
-      if (previousString.includes(key)) {
-        acc.pop();
-        acc.push([`Property '${path}${key}' was updated. From ${lastValue} to ${preparedValue}`]);
-      }
-      if (sign === '+' && !previousString.includes(key)) {
-        acc.push([`Property '${path}${key}' was added with value: ${preparedValue}`]);
-      }
-      if (sign === '-') {
-        acc.push([`Property '${path}${key}' was removed`]);
-      }
-      if (Array.isArray(value)
-        && arrayIdentifier !== 'array') {
-        const descendant = iter(value, newPath);
-        if (descendant) {
-          acc.push([iter(value, newPath)]);
+      const { status } = item;
+      switch (status) {
+        case 'changed': {
+          const { value1, value2 } = item;
+          const formattedValue1 = formatValue(value1);
+          const formattedValue2 = formatValue(value2);
+          acc.push([
+            `Property '${path}${name}' was updated. From ${formattedValue1} to ${formattedValue2}`,
+          ]);
+          return acc;
         }
+        case 'added': {
+          const { value } = item;
+          const formattedValue = formatValue(value);
+          acc.push([
+            `Property '${path}${name}' was added with value: ${formattedValue}`,
+          ]);
+          return acc;
+        }
+        case 'deleted': {
+          acc.push([`Property '${path}${name}' was removed`]);
+          return acc;
+        }
+        case 'unchanged': {
+          return acc;
+        }
+        default:
+          throw new Error('Type of node is not defined');
       }
-      lastValue = preparedValue;
-      return acc;
     }, []);
-    const flatLines = lines.flat();
-    return [...flatLines].join('\n');
+    const filteredLines = lines
+      .flat()
+      .filter((child) => child.length !== 0);
+    return [...filteredLines].join('\n');
   };
   return iter(data, '');
 };
