@@ -16,41 +16,40 @@ const compare = (object1, object2) => {
       ? _.cloneDeep(object2[key]) : object2[key];
 
     const item = { name: `${key}` };
-    if (!Object.hasOwn(object1, key)) {
-      item.status = 'added';
-      item.type = 'plained';
-      item.value = value2;
-      acc.push(item);
-      return acc;
-    }
-    if (!Object.hasOwn(object2, key)) {
-      item.status = 'deleted';
-      item.type = 'plained';
-      item.value = value1;
-      acc.push(item);
-      return acc;
-    }
-    if (_.isEqual(value1, value2)) {
-      item.status = 'unchanged';
-      item.type = 'plained';
-      item.value = value1;
-      acc.push(item);
-      return acc;
-    }
     if (_.isObject(value1)
-      && !Array.isArray(value1)
-      && _.isObject(value2)
-      && !Array.isArray(value2)) {
+            && !Array.isArray(value1)
+            && _.isObject(value2)
+            && !Array.isArray(value2)
+    ) {
       const children = compare(value1, value2);
       item.type = 'nested';
       item.children = children;
       acc.push(item);
       return acc;
     }
-    item.status = 'changed';
-    item.type = 'plained';
     item.value1 = value1;
     item.value2 = value2;
+
+    if (!Object.hasOwn(object1, key)) {
+      item.status = 'added';
+      item.type = 'plained';
+      acc.push(item);
+      return acc;
+    }
+    if (!Object.hasOwn(object2, key)) {
+      item.status = 'deleted';
+      item.type = 'plained';
+      acc.push(item);
+      return acc;
+    }
+    if (_.isEqual(value1, value2)) {
+      item.status = 'unchanged';
+      item.type = 'plained';
+      acc.push(item);
+      return acc;
+    }
+    item.status = 'changed';
+    item.type = 'plained';
     acc.push(item);
     return acc;
   }, []);
