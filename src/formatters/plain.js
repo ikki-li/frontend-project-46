@@ -19,22 +19,20 @@ const generatePlainView = (data) => {
         acc.push([iter(children, newPath)]);
         return acc;
       }
+      const { value1, value2 } = item;
+      const formattedValue1 = formatValue(value1);
+      const formattedValue2 = formatValue(value2);
       const { status } = item;
       switch (status) {
         case 'changed': {
-          const { value1, value2 } = item;
-          const formattedValue1 = formatValue(value1);
-          const formattedValue2 = formatValue(value2);
           acc.push([
             `Property '${path}${name}' was updated. From ${formattedValue1} to ${formattedValue2}`,
           ]);
           return acc;
         }
         case 'added': {
-          const { value } = item;
-          const formattedValue = formatValue(value);
           acc.push([
-            `Property '${path}${name}' was added with value: ${formattedValue}`,
+            `Property '${path}${name}' was added with value: ${formattedValue2}`,
           ]);
           return acc;
         }
