@@ -4,19 +4,6 @@ import _ from 'lodash';
 import { parse } from './parsers/parser.js';
 import { chooseFormat } from './formatters/index.js';
 
-const getSortedEntries = (object) => {
-  const entries = Object
-    .entries(object)
-    .sort(([key1], [key2]) => (key1 > key2 ? 1 : -1))
-    .map(([key, value]) => {
-      if (!_.isObject(value)) {
-        return [' ', key, value];
-      }
-      return [' ', key, getSortedEntries(value)];
-    });
-  return entries;
-};
-
 const compare = (object1, object2) => {
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
@@ -27,55 +14,40 @@ const compare = (object1, object2) => {
       ? _.cloneDeep(object1[key]) : object1[key];
     const value2 = _.isObject(object2[key])
       ? _.cloneDeep(object2[key]) : object2[key];
-    let preparedValue1 = value1;
-    let preparedValue2 = value2;
-    if (Array.isArray(value1)) {
-      preparedValue1 = ['array', value1];
-    } else if (
-      _.isObject(value1)
-      && !(
-        _.isObject(value2)
-        && !Array.isArray(value2)
-        && !_.isEqual(value1, value2)
-      )
-    ) {
-      preparedValue1 = getSortedEntries(value1);
-    }
-    if (Array.isArray(value2)) {
-      preparedValue2 = ['array', value2];
-    } else if (
-      _.isObject(value2)
-      && !(
-        _.isObject(value1)
-        && !Array.isArray(value1)
-        && !_.isEqual(value1, value2)
-      )
-    ) {
-      preparedValue2 = getSortedEntries(value2);
-    }
 
+    const item = { name: `${key}` };
     if (!Object.hasOwn(object1, key)) {
-      acc.push(['+', key, preparedValue2]);
+      item.type = 'added';
+      item.value = _.cloneDeep(value2);
+      acc.push(item);
       return acc;
     }
     if (!Object.hasOwn(object2, key)) {
-      acc.push(['-', key, preparedValue1]);
+      item.type = 'deleted';
+      item.value = _.cloneDeep(value1);
+      acc.push(item);
       return acc;
     }
     if (_.isEqual(value1, value2)) {
-      acc.push([' ', key, preparedValue1]);
+      item.type = 'unchanged';
+      item.value = value1;
+      acc.push(item);
       return acc;
     }
     if (_.isObject(value1)
       && !Array.isArray(value1)
       && _.isObject(value2)
       && !Array.isArray(value2)) {
-      const currentValue = compare(preparedValue1, preparedValue2);
-      acc.push([' ', key, currentValue]);
+      const children = compare(value1, value2);
+      item.type = 'node';
+      item.children = children;
+      acc.push(item);
       return acc;
     }
-    acc.push(['-', key, preparedValue1]);
-    acc.push(['+', key, preparedValue2]);
+    item.type = 'changed';
+    item.value1 = value1;
+    item.value2 = value2;
+    acc.push(item);
     return acc;
   }, []);
   return difference;
