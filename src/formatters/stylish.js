@@ -35,12 +35,13 @@ const generateTreeView = (data) => {
     const bracketIndent = indent.repeat(bracketIndentSize);
     const lines = currentItem.map((node) => {
       const { name, type } = node;
-      switch (type) {
-        case 'node': {
-          const { children } = node;
-          const childrenView = iter(children, depth + 1);
-          return `${currentIndent}  ${name}: ${childrenView}`;
-        }
+      if (type === 'nested') {
+        const { children } = node;
+        const childrenView = iter(children, depth + 1);
+        return `${currentIndent}  ${name}: ${childrenView}`;
+      }
+      const { status } = node;
+      switch (status) {
         case 'changed': {
           const { value1, value2 } = node;
           const formattedValue1 = _.isObject(value1)
