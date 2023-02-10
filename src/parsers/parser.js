@@ -1,14 +1,13 @@
 import * as yaml from 'js-yaml';
 
 const parse = (data, format) => {
-  let object;
   if (format === '.json') {
-    object = JSON.parse(data);
+    return JSON.parse(data);
   }
   if (format === '.yml' || format === '.yaml') {
-    object = yaml.load(data);
+    return yaml.load(data);
   }
-  return object;
+  throw new Error('File format is not defined');
 };
 
 // eslint-disable-next-line import/prefer-default-export
