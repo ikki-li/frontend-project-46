@@ -13,4 +13,5 @@ program
     const formatName = options.format;
     runDiff(filepath1, filepath2, formatName);
   });
+
 program.parse();
