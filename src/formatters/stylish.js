@@ -34,32 +34,40 @@ const generateTreeView = (data) => {
     const bracketIndentSize = (baseSpaceCount * depth) - baseSpaceCount;
     const bracketIndent = indent.repeat(bracketIndentSize);
     const lines = currentItem.map((node) => {
-      const { name, type } = node;
+      const {
+        name,
+        type,
+        values,
+        status,
+        children,
+      } = node;
       if (type === 'nested') {
-        const { children } = node;
         const childrenView = iter(children, depth + 1);
         return `${currentIndent}  ${name}: ${childrenView}`;
       }
-      const { value1, value2 } = node;
-      const formattedValue1 = _.isObject(value1)
-        ? formatObject(value1, depth)
-        : value1;
-      const formattedValue2 = _.isObject(value2)
-        ? formatObject(value2, depth)
-        : value2;
-      const { status } = node;
+      if (status === 'changed') {
+        const [value1, value2] = values;
+        const formattedValue1 = _.isObject(value1)
+          ? formatObject(value1, depth)
+          : value1;
+        const formattedValue2 = _.isObject(value2)
+          ? formatObject(value2, depth)
+          : value2;
+        return `${currentIndent}- ${name}: ${formattedValue1}\n${currentIndent}+ ${name}: ${formattedValue2}`;
+      }
+      const [value] = values;
+      const formattedValue = _.isObject(value)
+        ? formatObject(value, depth)
+        : value;
       switch (status) {
-        case 'changed': {
-          return `${currentIndent}- ${name}: ${formattedValue1}\n${currentIndent}+ ${name}: ${formattedValue2}`;
-        }
         case 'added': {
-          return `${currentIndent}+ ${name}: ${formattedValue2}`;
+          return `${currentIndent}+ ${name}: ${formattedValue}`;
         }
         case 'deleted': {
-          return `${currentIndent}- ${name}: ${formattedValue1}`;
+          return `${currentIndent}- ${name}: ${formattedValue}`;
         }
         case 'unchanged': {
-          return `${currentIndent}  ${name}: ${formattedValue1}`;
+          return `${currentIndent}  ${name}: ${formattedValue}`;
         }
         default: {
           throw new Error('Type of node is not defined');
