@@ -9,7 +9,10 @@ const chooseFormat = (formatName) => {
   if (formatName === 'json') {
     return generateJsonView;
   }
-  return generateTreeView;
+  if (formatName === 'stylish') {
+    return generateTreeView;
+  }
+  throw new Error('Formatter is not found');
 };
 
 // eslint-disable-next-line import/prefer-default-export
