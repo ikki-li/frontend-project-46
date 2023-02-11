@@ -35,6 +35,6 @@ npm install @hexlet/code
 [![Asciicast 558246](https://asciinema.org/a/558246.svg)](https://asciinema.org/a/558246)
 
 **Get difference in json format:**
-[![Asciicast 558247](https://asciinema.org/a/558247.svg)](https://asciinema.org/a/558247)
+[![Asciicast 559036](https://asciinema.org/a/559036.svg)](https://asciinema.org/a/559036)
 
 
