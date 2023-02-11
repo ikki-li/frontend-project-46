@@ -9,13 +9,18 @@ const compare = (object1, object2) => {
   const keys2 = Object.keys(object2);
   const commonKeys = _.union(keys1, keys2);
   const sortedCommonKeys = _.sortBy(commonKeys);
-  const difference = sortedCommonKeys.reduce((acc, key) => {
+  const difference = sortedCommonKeys.map((key) => {
     const value1 = _.isObject(object1[key])
       ? _.cloneDeep(object1[key]) : object1[key];
     const value2 = _.isObject(object2[key])
       ? _.cloneDeep(object2[key]) : object2[key];
 
-    const item = { name: `${key}` };
+    const item = {
+      name: key,
+      type: null,
+      children: null,
+      values: [],
+    };
     if (_.isObject(value1)
             && !Array.isArray(value1)
             && _.isObject(value2)
@@ -24,34 +29,28 @@ const compare = (object1, object2) => {
       const children = compare(value1, value2);
       item.type = 'nested';
       item.children = children;
-      acc.push(item);
-      return acc;
+      return item;
     }
-    item.value1 = value1;
-    item.value2 = value2;
-
+    item.type = 'plained';
     if (!Object.hasOwn(object1, key)) {
       item.status = 'added';
-      item.type = 'plained';
-      acc.push(item);
-      return acc;
+      item.values.push(value2);
+      return item;
     }
     if (!Object.hasOwn(object2, key)) {
       item.status = 'deleted';
-      item.type = 'plained';
-      acc.push(item);
-      return acc;
+      item.values.push(value1);
+      return item;
     }
     if (_.isEqual(value1, value2)) {
       item.status = 'unchanged';
-      item.type = 'plained';
-      acc.push(item);
-      return acc;
+      item.values.push(value1);
+      return item;
     }
     item.status = 'changed';
-    item.type = 'plained';
-    acc.push(item);
-    return acc;
+    item.values.push(value1);
+    item.values.push(value2);
+    return item;
   }, []);
   return difference;
 };
