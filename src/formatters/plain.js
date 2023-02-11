@@ -11,45 +11,40 @@ const formatValue = (value) => {
 
 const generatePlainView = (data) => {
   const iter = (currentItem, path) => {
-    const lines = currentItem.reduce((acc, item) => {
-      const { name, type } = item;
+    const lines = currentItem.flatMap((item) => {
+      const {
+        name,
+        type,
+        values,
+        status,
+        children,
+      } = item;
       const newPath = `${path}${name}.`;
       if (type === 'nested') {
-        const { children } = item;
-        acc.push([iter(children, newPath)]);
-        return acc;
+        return iter(children, newPath);
       }
-      const { value1, value2 } = item;
-      const formattedValue1 = formatValue(value1);
-      const formattedValue2 = formatValue(value2);
-      const { status } = item;
       switch (status) {
         case 'changed': {
-          acc.push([
-            `Property '${path}${name}' was updated. From ${formattedValue1} to ${formattedValue2}`,
-          ]);
-          return acc;
+          const [value1, value2] = values;
+          const formattedValue1 = formatValue(value1);
+          const formattedValue2 = formatValue(value2);
+          return `Property '${path}${name}' was updated. From ${formattedValue1} to ${formattedValue2}`;
         }
         case 'added': {
-          acc.push([
-            `Property '${path}${name}' was added with value: ${formattedValue2}`,
-          ]);
-          return acc;
+          const [value] = values;
+          const formattedValue = formatValue(value);
+          return `Property '${path}${name}' was added with value: ${formattedValue}`;
         }
-        case 'deleted': {
-          acc.push([`Property '${path}${name}' was removed`]);
-          return acc;
-        }
+        case 'deleted':
+          return `Property '${path}${name}' was removed`;
         case 'unchanged': {
-          return acc;
+          return '';
         }
         default:
           throw new Error('Type of node is not defined');
       }
     }, []);
-    const filteredLines = lines
-      .flat()
-      .filter((child) => child.length !== 0);
+    const filteredLines = lines.filter((child) => child.length !== 0);
     return [...filteredLines].join('\n');
   };
   return iter(data, '');
