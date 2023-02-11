@@ -9,46 +9,58 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
 test('main flow', () => {
-  const content = fs.readFileSync(getFixturePath('tree-difference.txt'), 'utf-8');
-  expect(
-    runDiff(getFixturePath('file1.json'), getFixturePath('file2.json')),
-  ).toEqual(content);
-  expect(
-    runDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml')),
-  ).toEqual(content);
-  expect(
-    runDiff(getFixturePath('file1.yml'), getFixturePath('file2.yaml')),
-  ).toEqual(content);
+  const differencePath = getFixturePath('tree-difference.txt');
+  const expectedValue = fs.readFileSync(differencePath, 'utf-8');
+  const format = 'stylish';
+  let fixturePath1 = getFixturePath('file1.json');
+  let fixturePath2 = getFixturePath('file2.json');
+  let actualValue = runDiff(fixturePath1, fixturePath2, format);
+  expect(actualValue).toEqual(expectedValue);
+
+  fixturePath1 = getFixturePath('file1.yml');
+  fixturePath2 = getFixturePath('file2.yaml');
+  actualValue = runDiff(fixturePath1, fixturePath2, format);
+  expect(actualValue).toEqual(expectedValue);
+
+  fixturePath1 = getFixturePath('empty-file1.json');
+  let throwMessage = 'empty-file1.json is empty';
   expect(() => {
-    runDiff(
-      getFixturePath('empty-file1.json'),
-      getFixturePath('file2.json'),
-    );
-  }).toThrow('empty-file1.json is empty');
+    runDiff(fixturePath1, fixturePath2, format);
+  }).toThrow(throwMessage);
+
+  fixturePath1 = getFixturePath('non-existent-file.json');
+  throwMessage = "File doesn't exist";
   expect(() => {
-    runDiff(
-      getFixturePath('non-existent-file.json'),
-      getFixturePath('file2.json'),
-    );
-  }).toThrow("File doesn't exist");
+    runDiff(fixturePath1, fixturePath2, format);
+  }).toThrow(throwMessage);
 });
 
 test('plain format', () => {
-  const content = fs.readFileSync(getFixturePath('flat-difference.txt'), 'utf-8');
-  expect(
-    runDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'plain'),
-  ).toEqual(content);
-  expect(
-    runDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'plain'),
-  ).toEqual(content);
+  const format = 'plain';
+  const differencePath = getFixturePath('flat-difference.txt');
+  const expectedValue = fs.readFileSync(differencePath, 'utf-8');
+  let fixturePath1 = getFixturePath('file1.json');
+  let fixturePath2 = getFixturePath('file2.json');
+  let actualValue = runDiff(fixturePath1, fixturePath2, format);
+  expect(actualValue).toEqual(expectedValue);
+
+  fixturePath1 = getFixturePath('file1.yaml');
+  fixturePath2 = getFixturePath('file2.yaml');
+  actualValue = runDiff(fixturePath1, fixturePath2, format);
+  expect(actualValue).toEqual(expectedValue);
 });
 
 test('json format', () => {
-  const content = fs.readFileSync(getFixturePath('json-difference.txt'), 'utf-8');
-  expect(
-    runDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'json'),
-  ).toEqual(content);
-  expect(
-    runDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'json'),
-  ).toEqual(content);
+  const format = 'json';
+  const differencePath = getFixturePath('json-difference.txt');
+  const expectedValue = fs.readFileSync(differencePath, 'utf-8');
+  let fixturePath1 = getFixturePath('file1.json');
+  let fixturePath2 = getFixturePath('file2.json');
+  let actualValue = runDiff(fixturePath1, fixturePath2, format);
+  expect(actualValue).toEqual(expectedValue);
+
+  fixturePath1 = getFixturePath('file1.yaml');
+  fixturePath2 = getFixturePath('file2.yaml');
+  actualValue = runDiff(fixturePath1, fixturePath2, format);
+  expect(actualValue).toEqual(expectedValue);
 });
