@@ -1,76 +1,48 @@
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import fs from 'node:fs';
-import runDiff from '../src/index.js';
+import genDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const readFixture = (filename) => {
+  const fixturePath = getFixturePath(filename);
+  return fs.readFileSync(fixturePath, 'utf-8');
+};
+const expectedStylish = readFixture('stylish-difference.txt');
+const expectedPlain = readFixture('plain-difference.txt');
+const expectedJSON = readFixture('json-difference.txt');
 
-describe('main flow', () => {
-  const differencePath = getFixturePath('stylish-difference.txt');
-  const expectedValue = fs.readFileSync(differencePath, 'utf-8');
-  const format = 'stylish';
-  test('get diff between two json files', () => {
-    const fixturePath1 = getFixturePath('file1.json');
-    const fixturePath2 = getFixturePath('file2.json');
-    const actualValue = runDiff(fixturePath1, fixturePath2, format);
-    expect(actualValue).toEqual(expectedValue);
-  });
-  const fixturePath2 = getFixturePath('file2.yaml');
-  test('get diff between two yaml files', () => {
-    const fixturePath1 = getFixturePath('file1.yml');
-    const actualValue = runDiff(fixturePath1, fixturePath2, format);
-    expect(actualValue).toEqual(expectedValue);
-  });
-  test('throw: empty file', () => {
-    const fixturePath1 = getFixturePath('empty-file1.json');
-    const throwMessage = 'empty-file1.json is empty';
-    expect(() => {
-      runDiff(fixturePath1, fixturePath2, format);
-    }).toThrow(throwMessage);
-  });
-  test('throw: non-existent file', () => {
-    const fixturePath1 = getFixturePath('non-existent-file.json');
-    const throwMessage = "File doesn't exist";
-    expect(() => {
-      runDiff(fixturePath1, fixturePath2, format);
-    }).toThrow(throwMessage);
-  });
+test('should be work with json', () => {
+  const filepath1 = getFixturePath('file1.json');
+  const filepath2 = getFixturePath('file2.json');
+  expect(genDiff(filepath1, filepath2)).toBe(expectedStylish);
+  expect(genDiff(filepath1, filepath2, 'stylish')).toBe(expectedStylish);
+  expect(genDiff(filepath1, filepath2, 'plain')).toBe(expectedPlain);
+  expect(genDiff(filepath1, filepath2, 'json')).toBe(expectedJSON);
 });
-
-describe('plain formatter', () => {
-  const format = 'plain';
-  const differencePath = getFixturePath('plain-difference.txt');
-  const expectedValue = fs.readFileSync(differencePath, 'utf-8');
-  test('get diff between two json files', () => {
-    const fixturePath1 = getFixturePath('file1.json');
-    const fixturePath2 = getFixturePath('file2.json');
-    const actualValue = runDiff(fixturePath1, fixturePath2, format);
-    expect(actualValue).toEqual(expectedValue);
-  });
-  test('get diff between two yaml files', () => {
-    const fixturePath1 = getFixturePath('file1.yaml');
-    const fixturePath2 = getFixturePath('file2.yaml');
-    const actualValue = runDiff(fixturePath1, fixturePath2, format);
-    expect(actualValue).toEqual(expectedValue);
-  });
+test('should be work with yml', () => {
+  const filepath1 = getFixturePath('file1.yml');
+  const filepath2 = getFixturePath('file2.yml');
+  expect(genDiff(filepath1, filepath2)).toBe(expectedStylish);
+  expect(genDiff(filepath1, filepath2, 'stylish')).toBe(expectedStylish);
+  expect(genDiff(filepath1, filepath2, 'plain')).toBe(expectedPlain);
+  expect(genDiff(filepath1, filepath2, 'json')).toBe(expectedJSON);
 });
-
-describe('json formatter', () => {
-  const format = 'json';
-  const differencePath = getFixturePath('json-difference.txt');
-  const expectedValue = fs.readFileSync(differencePath, 'utf-8');
-  test('get diff between two json files', () => {
-    const fixturePath1 = getFixturePath('file1.json');
-    const fixturePath2 = getFixturePath('file2.json');
-    const actualValue = runDiff(fixturePath1, fixturePath2, format);
-    expect(actualValue).toEqual(expectedValue);
-  });
-  test('get diff between two yaml files', () => {
-    const fixturePath1 = getFixturePath('file1.yaml');
-    const fixturePath2 = getFixturePath('file2.yaml');
-    const actualValue = runDiff(fixturePath1, fixturePath2, format);
-    expect(actualValue).toEqual(expectedValue);
-  });
+test('should be throw: empty file', () => {
+  const filepath1 = getFixturePath('empty-file1.json');
+  const filepath2 = getFixturePath('file1.json');
+  const throwMessage = 'empty-file1.json is empty';
+  expect(() => {
+    genDiff(filepath1, filepath2);
+  }).toThrow(throwMessage);
+});
+test('should be throw: non-existent file', () => {
+  const filepath1 = getFixturePath('non-existent-file.json');
+  const filepath2 = getFixturePath('file1.json');
+  const throwMessage = "File doesn't exist";
+  expect(() => {
+    genDiff(filepath1, filepath2);
+  }).toThrow(throwMessage);
 });
