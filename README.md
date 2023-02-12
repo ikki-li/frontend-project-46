@@ -14,10 +14,35 @@ Command line utility to get differences between two YAML or JSON documents.
 
 Node.js ^14.0.0
 
-### Installation:
+### Install as package:
 
 ```
 npm install @hexlet/code
+```
+
+### Usage as package:
+
+```
+import genDiff from '@hexlet/code';
+
+const diff = genDiff(filepath1, filepath2, format);
+console.log(diff);
+```
+
+### Install as application:
+
+```
+npm install gendiff
+```
+or with deps from package-lock.json:
+```
+npm ci gendiff
+```
+
+### Usage as application:
+
+```
+gendiff -f stylish data/file1.json data/file2.json
 ```
 
 ### GenDiff on Asciinema:
