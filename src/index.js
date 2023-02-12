@@ -1,5 +1,5 @@
-import * as path from 'path';
-import * as fs from 'node:fs';
+import path from 'path';
+import fs from 'node:fs';
 import _ from 'lodash';
 import { parse } from './parsers/parser.js';
 import { chooseFormat } from './formatters/index.js';
@@ -61,7 +61,7 @@ const compare = (object1, object2) => {
   return difference;
 };
 
-const runDiff = (path1, path2, formatName = 'stylish') => {
+const genDiff = (path1, path2, formatName = 'stylish') => {
   const normalizedPath1 = path.resolve(path1);
   const normalizedPath2 = path.resolve(path2);
   if (!fs.existsSync(normalizedPath1) || !fs.existsSync(normalizedPath2)) {
@@ -88,4 +88,4 @@ const runDiff = (path1, path2, formatName = 'stylish') => {
   return format(difference);
 };
 
-export default runDiff;
+export default genDiff;
