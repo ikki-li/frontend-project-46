@@ -10,5 +10,4 @@ const parse = (data, format) => {
   throw new Error('File format is not defined');
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export { parse };

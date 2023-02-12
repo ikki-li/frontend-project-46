@@ -15,5 +15,4 @@ const chooseFormat = (formatName) => {
   throw new Error('Formatter is not found');
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export { chooseFormat };
