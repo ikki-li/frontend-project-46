@@ -1,7 +1,6 @@
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import * as path from 'path';
-import * as fs from 'node:fs';
+import path, { dirname } from 'path';
+import fs from 'node:fs';
 import runDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -9,7 +8,7 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
 describe('main flow', () => {
-  const differencePath = getFixturePath('tree-difference.txt');
+  const differencePath = getFixturePath('stylish-difference.txt');
   const expectedValue = fs.readFileSync(differencePath, 'utf-8');
   const format = 'stylish';
   test('get diff between two json files', () => {
@@ -42,7 +41,7 @@ describe('main flow', () => {
 
 describe('plain formatter', () => {
   const format = 'plain';
-  const differencePath = getFixturePath('flat-difference.txt');
+  const differencePath = getFixturePath('plain-difference.txt');
   const expectedValue = fs.readFileSync(differencePath, 'utf-8');
   test('get diff between two json files', () => {
     const fixturePath1 = getFixturePath('file1.json');
