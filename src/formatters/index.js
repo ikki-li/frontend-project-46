@@ -2,17 +2,17 @@ import generateStylishView from './stylish.js';
 import generatePlainView from './plain.js';
 import generateJSONView from './json.js';
 
-const chooseFormat = (formatName) => {
+const format = (formatName, data) => {
   if (formatName === 'plain') {
-    return generatePlainView;
+    return generatePlainView(data);
   }
   if (formatName === 'json') {
-    return generateJSONView;
+    return generateJSONView(data);
   }
   if (formatName === 'stylish') {
-    return generateStylishView;
+    return generateStylishView(data);
   }
   throw new Error('Formatter is not found');
 };
 
-export default chooseFormat;
+export default format;
