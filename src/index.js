@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'node:fs';
-import { parse } from './parsers/parser.js';
-import { chooseFormat } from './formatters/index.js';
-import { compare } from './comparators/compare.js';
+import parse from './parsers/parser.js';
+import chooseFormat from './formatters/index.js';
+import compare from './comparators/compare.js';
 
 const genDiff = (path1, path2, formatName = 'stylish') => {
   const normalizedPath1 = path.resolve(path1);

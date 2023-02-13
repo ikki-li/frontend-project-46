@@ -60,4 +60,4 @@ const compare = (object1, object2) => {
   return difference;
 };
 
-export { compare };
+export default compare;

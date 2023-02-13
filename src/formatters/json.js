@@ -1,3 +1,3 @@
-const generateJsonView = (data) => JSON.stringify(data, null, '');
+const generateJSONView = (data) => JSON.stringify(data, null, '');
 
-export { generateJsonView };
+export default generateJSONView;

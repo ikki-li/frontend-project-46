@@ -50,4 +50,4 @@ const generatePlainView = (data) => {
   return iter(data, '');
 };
 
-export { generatePlainView };
+export default generatePlainView;

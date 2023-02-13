@@ -27,7 +27,7 @@ const formatObject = (object, depth) => {
   return ['{', ...lines, `${bracketIndent}}`].join('\n');
 };
 
-const generateTreeView = (data) => {
+const generateStylishView = (data) => {
   const iter = (currentItem, depth) => {
     const currentIndentSize = (baseSpaceCount * depth) - signSpaceCount;
     const currentIndent = indent.repeat(currentIndentSize);
@@ -79,4 +79,4 @@ const generateTreeView = (data) => {
   return iter(data, 1);
 };
 
-export { generateTreeView };
+export default generateStylishView;

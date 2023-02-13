@@ -10,4 +10,4 @@ const parse = (data, format) => {
   throw new Error('File format is not defined');
 };
 
-export { parse };
+export default parse;
