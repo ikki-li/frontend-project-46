@@ -25,6 +25,7 @@ const genDiff = (path1, path2, formatName = 'stylish') => {
   const data1 = getData(path1);
   const data2 = getData(path2);
   const difference = compare(data1, data2);
+  console.log(format(formatName, difference));
   return format(formatName, difference);
 };
 
