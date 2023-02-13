@@ -4,7 +4,7 @@ import parse from './parsers/parser.js';
 import format from './formatters/index.js';
 import compare from './comparators/compare.js';
 
-const normalizePath = (filepath) => path.resolve(filepath);
+const normalizePath = (filepath) => path.resolve(process.cwd(), filepath);
 const getFormat = (filepath) => {
   if (!fs.existsSync(filepath)) {
     throw new Error(`"${path.basename(filepath)} doesn't exist"`);
