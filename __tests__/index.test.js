@@ -41,7 +41,7 @@ test('should be throw: empty file', () => {
 test('should be throw: non-existent file', () => {
   const filepath1 = getFixturePath('non-existent-file.json');
   const filepath2 = getFixturePath('file1.json');
-  const throwMessage = "File doesn't exist";
+  const throwMessage = "non-existent-file.json doesn't exist";
   expect(() => {
     genDiff(filepath1, filepath2);
   }).toThrow(throwMessage);
