@@ -12,5 +12,4 @@ rules:
   import/extensions: ["error", "ignorePackages", { "js": "always" }]
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
   no-console: 0
-  import/prefer-default-export: 0
 root: true
