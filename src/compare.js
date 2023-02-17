@@ -1,17 +1,17 @@
 import _ from 'lodash';
 
-const compare = (object1, object2) => {
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
+const compare = (data1, data2) => {
+  const keys1 = Object.keys(data1);
+  const keys2 = Object.keys(data2);
   const commonKeys = _.union(keys1, keys2);
   const sortedCommonKeys = _.sortBy(commonKeys);
   const difference = sortedCommonKeys.map((key) => {
-    const value1 = _.isObject(object1[key])
-      ? _.cloneDeep(object1[key])
-      : object1[key];
-    const value2 = _.isObject(object2[key])
-      ? _.cloneDeep(object2[key])
-      : object2[key];
+    const value1 = _.isObject(data1[key])
+      ? _.cloneDeep(data1[key])
+      : data1[key];
+    const value2 = _.isObject(data2[key])
+      ? _.cloneDeep(data2[key])
+      : data2[key];
 
     if (
       _.isObject(value1)
@@ -26,7 +26,7 @@ const compare = (object1, object2) => {
         children,
       };
     }
-    if (!Object.hasOwn(object1, key)) {
+    if (!Object.hasOwn(data1, key)) {
       return {
         name: key,
         type: 'plained',
@@ -34,7 +34,7 @@ const compare = (object1, object2) => {
         values: [value2],
       };
     }
-    if (!Object.hasOwn(object2, key)) {
+    if (!Object.hasOwn(data2, key)) {
       return {
         name: key,
         type: 'plained',
