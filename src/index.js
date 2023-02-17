@@ -9,7 +9,7 @@ const getFormat = (filepath) => {
   if (!fs.existsSync(filepath)) {
     throw new Error(`"${path.basename(filepath)} doesn't exist"`);
   }
-  return path.extname(filepath);
+  return path.extname(filepath).split('.').at(-1);
 };
 const getData = (filepath) => {
   const fullPath = buildFullPath(filepath);

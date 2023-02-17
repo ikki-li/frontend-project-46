@@ -3,16 +3,16 @@ import generatePlainView from './plain.js';
 import generateJSONView from './json.js';
 
 const format = (formatName, data) => {
-  if (formatName === 'plain') {
-    return generatePlainView(data);
+  switch (formatName) {
+    case 'plain':
+      return generatePlainView(data);
+    case 'json':
+      return generateJSONView(data);
+    case 'stylish':
+      return generateStylishView(data);
+    default:
+      throw new Error(`Formatter "${formatName}" is not found`);
   }
-  if (formatName === 'json') {
-    return generateJSONView(data);
-  }
-  if (formatName === 'stylish') {
-    return generateStylishView(data);
-  }
-  throw new Error('Formatter is not found');
 };
 
 export default format;
