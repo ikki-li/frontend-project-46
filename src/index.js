@@ -4,7 +4,7 @@ import parse from './parsers/parser.js';
 import format from './formatters/index.js';
 import compare from './comparators/compare.js';
 
-const normalizePath = (filepath) => path.resolve(process.cwd(), filepath);
+const buildFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 const getFormat = (filepath) => {
   if (!fs.existsSync(filepath)) {
     throw new Error(`"${path.basename(filepath)} doesn't exist"`);
@@ -12,11 +12,11 @@ const getFormat = (filepath) => {
   return path.extname(filepath);
 };
 const getData = (filepath) => {
-  const normalizedPath = normalizePath(filepath);
-  const fileFormat = getFormat(normalizedPath);
-  const data = fs.readFileSync(normalizedPath, 'utf-8');
+  const fullPath = buildFullPath(filepath);
+  const fileFormat = getFormat(fullPath);
+  const data = fs.readFileSync(fullPath, 'utf-8');
   if (data.length === 0) {
-    throw new Error(`${path.basename(normalizedPath)} is empty`);
+    throw new Error(`${path.basename(fullPath)} is empty`);
   }
   return parse(data, fileFormat);
 };
