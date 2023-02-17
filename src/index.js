@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'node:fs';
-import parse from './parsers/parser.js';
+import parse from './parsers.js';
+import compare from './compare.js';
 import format from './formatters/index.js';
-import compare from './comparators/compare.js';
 
 const buildFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 const getFormat = (filepath) => {
