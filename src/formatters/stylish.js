@@ -34,43 +34,46 @@ const generateStylishView = (data) => {
     const bracketIndentSize = (baseSpaceCount * depth) - baseSpaceCount;
     const bracketIndent = indent.repeat(bracketIndentSize);
     const lines = currentItem.map((node) => {
-      const {
-        name,
-        type,
-        values,
-        status,
-        children,
-      } = node;
-      if (type === 'nested') {
-        const childrenView = iter(children, depth + 1);
-        return `${currentIndent}  ${name}: ${childrenView}`;
-      }
-      if (status === 'changed') {
-        const [value1, value2] = values;
-        const formattedValue1 = _.isObject(value1)
-          ? formatObject(value1, depth)
-          : value1;
-        const formattedValue2 = _.isObject(value2)
-          ? formatObject(value2, depth)
-          : value2;
-        return `${currentIndent}- ${name}: ${formattedValue1}\n${currentIndent}+ ${name}: ${formattedValue2}`;
-      }
-      const [value] = values;
-      const formattedValue = _.isObject(value)
-        ? formatObject(value, depth)
-        : value;
-      switch (status) {
+      const { key, type } = node;
+      switch (type) {
+        case 'nested': {
+          const { children } = node;
+          const childrenView = iter(children, depth + 1);
+          return `${currentIndent}  ${key}: ${childrenView}`;
+        }
+        case 'changed': {
+          const { value1, value2 } = node;
+          const formattedValue1 = _.isObject(value1)
+            ? formatObject(value1, depth)
+            : value1;
+          const formattedValue2 = _.isObject(value2)
+            ? formatObject(value2, depth)
+            : value2;
+          return `${currentIndent}- ${key}: ${formattedValue1}\n${currentIndent}+ ${key}: ${formattedValue2}`;
+        }
         case 'added': {
-          return `${currentIndent}+ ${name}: ${formattedValue}`;
+          const { value } = node;
+          const formattedValue = _.isObject(value)
+            ? formatObject(value, depth)
+            : value;
+          return `${currentIndent}+ ${key}: ${formattedValue}`;
         }
         case 'deleted': {
-          return `${currentIndent}- ${name}: ${formattedValue}`;
+          const { value } = node;
+          const formattedValue = _.isObject(value)
+            ? formatObject(value, depth)
+            : value;
+          return `${currentIndent}- ${key}: ${formattedValue}`;
         }
         case 'unchanged': {
-          return `${currentIndent}  ${name}: ${formattedValue}`;
+          const { value } = node;
+          const formattedValue = _.isObject(value)
+            ? formatObject(value, depth)
+            : value;
+          return `${currentIndent}  ${key}: ${formattedValue}`;
         }
         default: {
-          throw new Error('Type of node is not defined');
+          throw new Error(`Node type ${type} is not defined`);
         }
       }
     });
