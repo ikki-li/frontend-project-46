@@ -1,81 +1,69 @@
 import _ from 'lodash';
 
-const indent = ' ';
-const baseSpaceCount = 4;
-const signSpaceCount = 2;
+const indent = (depth, isFull) => {
+  const indention = ' ';
+  const baseSpaceCount = 4;
+  const signSpaceCount = 2;
+  const indentSize = isFull === true ? baseSpaceCount * depth
+    : baseSpaceCount * depth - signSpaceCount;
+  return indention.repeat(indentSize);
+};
 
-const stringify = (value, depth) => {
-  if (!_.isObject(value)) {
-    return `${value}`;
+const stringify = (data, depth) => {
+  const currentIndent = indent(depth + 1, true);
+  const bracketIndent = indent(depth, true);
+  if (!_.isObject(data)) {
+    return String(data);
   }
-  const indentSize = baseSpaceCount * (depth + 1);
-  const curIndent = indent.repeat(indentSize);
-  const bracketIndentSize = baseSpaceCount * depth;
-  const bracketIndent = indent.repeat(bracketIndentSize);
-  if (Array.isArray(value)) {
-    const itemsView = value.map((item) => {
-      if (_.isObject(item)) {
-        return stringify(item, depth + 1);
-      }
-      return `${curIndent}${item}`;
-    });
-    return ['[', ...itemsView, `${bracketIndent}]`].join('\n');
+  if (Array.isArray(data)) {
+    const itemsView = data.map((item) => `${currentIndent}${stringify(item, depth + 1)}`);
+    return `[\n${itemsView.join('\n')}\n${bracketIndent}]`;
   }
   const lines = Object
-    .entries(value)
-    .map(([key, val]) => `${curIndent}${key}: ${stringify(val, depth + 1)}`);
-
-  return [
-    '{',
-    ...lines,
-    `${bracketIndent}}`,
-  ].join('\n');
+    .entries(data)
+    .map(([key, value]) => `${currentIndent}${key}: ${stringify(value, depth + 1)}`);
+  return `{\n${lines.join('\n')}\n${bracketIndent}}`;
 };
 
-const generateStylishView = (data) => {
-  const iter = (currentItem, depth) => {
-    const currentIndentSize = baseSpaceCount * depth - signSpaceCount;
-    const currentIndent = indent.repeat(currentIndentSize);
-    const bracketIndentSize = baseSpaceCount * depth - baseSpaceCount;
-    const bracketIndent = indent.repeat(bracketIndentSize);
-
-    const lines = currentItem.map((node) => {
-      const { key, type } = node;
-      switch (type) {
-        case 'nested': {
-          const { children } = node;
-          const childrenView = iter(children, depth + 1);
-          return `${currentIndent}  ${key}: ${childrenView}`;
-        }
-        case 'changed': {
-          const { value1, value2 } = node;
-          const formattedValue1 = stringify(value1, depth);
-          const formattedValue2 = stringify(value2, depth);
-          return `${currentIndent}- ${key}: ${formattedValue1}\n${currentIndent}+ ${key}: ${formattedValue2}`;
-        }
-        case 'added': {
-          const { value } = node;
-          const formattedValue = stringify(value, depth);
-          return `${currentIndent}+ ${key}: ${formattedValue}`;
-        }
-        case 'deleted': {
-          const { value } = node;
-          const formattedValue = stringify(value, depth);
-          return `${currentIndent}- ${key}: ${formattedValue}`;
-        }
-        case 'unchanged': {
-          const { value } = node;
-          const formattedValue = stringify(value, depth);
-          return `${currentIndent}  ${key}: ${formattedValue}`;
-        }
-        default: {
-          throw new Error(`Node type ${type} is not defined`);
-        }
+const iter = (tree, depth) => {
+  const currentIndent = indent(depth, false);
+  return tree.map((node) => {
+    const { key, type } = node;
+    switch (type) {
+      case 'nested': {
+        const { children } = node;
+        const newChildren = iter(children, depth + 1);
+        const childrenView = `{\n${newChildren.join('\n')}\n${indent(depth, true)}}`;
+        return `${currentIndent}  ${key}: ${childrenView}`;
       }
-    });
-    return ['{', ...lines, `${bracketIndent}}`].join('\n');
-  };
-  return iter(data, 1);
+      case 'changed': {
+        const { value1, value2 } = node;
+        const output1 = `${currentIndent}- ${key}: ${stringify(value1, depth)}`;
+        const output2 = `${currentIndent}+ ${key}: ${stringify(value2, depth)}`;
+        return `${output1}\n${output2}`;
+      }
+      case 'added': {
+        const { value } = node;
+        return `${currentIndent}+ ${key}: ${stringify(value, depth)}`;
+      }
+      case 'deleted': {
+        const { value } = node;
+        return `${currentIndent}- ${key}: ${stringify(value, depth)}`;
+      }
+      case 'unchanged': {
+        const { value } = node;
+        return `${currentIndent}  ${key}: ${stringify(value, depth)}`;
+      }
+      default: {
+        throw new Error(`Node type ${type} is not defined`);
+      }
+    }
+  });
 };
 
-export default generateStylishView;
+const formatStylish = (data) => {
+  const lines = iter(data, 1);
+  return `{\n${lines.join('\n')}\n${indent(0, true)}}`;
+};
+
+export default formatStylish;
