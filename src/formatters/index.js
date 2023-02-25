@@ -1,15 +1,14 @@
-import generateStylishView from './stylish.js';
-import generatePlainView from './plain.js';
-import generateJSONView from './json.js';
+import formatStylish from './stylish.js';
+import formatPlain from './plain.js';
 
 const format = (formatName, data) => {
   switch (formatName) {
     case 'plain':
-      return generatePlainView(data);
+      return formatPlain(data);
     case 'json':
-      return generateJSONView(data);
+      return JSON.stringify(data, null, '');
     case 'stylish':
-      return generateStylishView(data);
+      return formatStylish(data);
     default:
       throw new Error(`Formatter "${formatName}" is not found`);
   }
