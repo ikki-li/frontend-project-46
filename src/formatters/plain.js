@@ -1,11 +1,11 @@
-const formatValue = (value) => {
-  switch (typeof value) {
+const toString = (data) => {
+  switch (typeof data) {
     case 'object':
-      return value !== null ? '[complex value]' : value;
+      return data !== null ? '[complex value]' : data;
     case 'string':
-      return `'${value}'`;
+      return `'${data}'`;
     default:
-      return value;
+      return data;
   }
 };
 
@@ -20,11 +20,11 @@ const iter = (tree, path) => {
       }
       case 'changed': {
         const { value1, value2 } = node;
-        return `Property '${path}${key}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`;
+        return `Property '${path}${key}' was updated. From ${toString(value1)} to ${toString(value2)}`;
       }
       case 'added': {
         const { value } = node;
-        return `Property '${path}${key}' was added with value: ${formatValue(value)}`;
+        return `Property '${path}${key}' was added with value: ${toString(value)}`;
       }
       case 'deleted':
         return `Property '${path}${key}' was removed`;
