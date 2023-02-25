@@ -4,9 +4,9 @@ const indent = (depth, isFull) => {
   const indention = ' ';
   const baseSpaceCount = 4;
   const signSpaceCount = 2;
-  const indentSize = isFull === true ? baseSpaceCount * depth
+  const indentionSize = isFull === true ? baseSpaceCount * depth
     : baseSpaceCount * depth - signSpaceCount;
-  return indention.repeat(indentSize);
+  return indention.repeat(indentionSize);
 };
 
 const stringify = (data, depth) => {
