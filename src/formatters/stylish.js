@@ -1,21 +1,14 @@
 import _ from 'lodash';
 
-const indent = (depth, isFull) => {
-  const indention = ' ';
-  const baseSpaceCount = 4;
-  const signSpaceCount = 2;
-  const indentionSize = isFull === true ? baseSpaceCount * depth
-    : baseSpaceCount * depth - signSpaceCount;
-  return indention.repeat(indentionSize);
-};
+const indent = (depth, isFull) => ' '.repeat(isFull ? 4 * depth : 4 * depth - 2);
 
 const stringify = (data, depth) => {
   if (!_.isObject(data)) {
     return String(data);
   }
   if (Array.isArray(data)) {
-    const itemsView = data.map((item) => `${indent(depth + 1, true)}${stringify(item, depth + 1)}`);
-    return `[\n${itemsView.join('\n')}\n${indent(depth, true)}]`;
+    const output = data.map((item) => `${indent(depth + 1, true)}${stringify(item, depth + 1)}`);
+    return `[\n${output.join('\n')}\n${indent(depth, true)}]`;
   }
   const lines = Object
     .entries(data)
@@ -28,9 +21,8 @@ const iter = (tree, depth) => tree.map((node) => {
   switch (type) {
     case 'nested': {
       const { children } = node;
-      const newChildren = iter(children, depth + 1);
-      const childrenView = `{\n${newChildren.join('\n')}\n${indent(depth, true)}}`;
-      return `${indent(depth, false)}  ${key}: ${childrenView}`;
+      const output = iter(children, depth + 1).join('\n');
+      return `${indent(depth, false)}  ${key}: {\n${output}\n${indent(depth, true)}}`;
     }
     case 'changed': {
       const { value1, value2 } = node;
